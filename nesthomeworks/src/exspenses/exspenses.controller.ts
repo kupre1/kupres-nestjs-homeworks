@@ -6,12 +6,16 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ExspenseService } from './exspenses.service';
 import { CreateExspensesDto } from './dtos/create-exspenses.dto';
 import { UpdateExspensesDto } from './dtos/update-exspenses.dto';
+import { DateRestrictionGuard } from 'src/guards/date.guards';
+import { EmailGuard } from 'src/guards/email.guards';
 
 @Controller('exspenses')
+@UseGuards(DateRestrictionGuard)
 export class ExspenseController {
   constructor(private exspensesService: ExspenseService) {}
 
@@ -21,6 +25,7 @@ export class ExspenseController {
   }
 
   @Post()
+  @UseGuards(EmailGuard)
   createExspenses(@Body() createExspenses: CreateExspensesDto) {
     return this.exspensesService.createExspenses(createExspenses);
   }
